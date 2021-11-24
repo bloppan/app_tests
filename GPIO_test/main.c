@@ -5,7 +5,7 @@
  *      Author: bernardo
  */
 
-#include "../libGPIO/GPIO_export.h"
+#include "../../app_shared_libraries/libGPIO/GPIO_export.h"
 
 
 int main(void){

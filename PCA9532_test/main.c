@@ -5,7 +5,7 @@
  *      Author: bernardo
  */
 
-#include "../libPCA9532/PCA9532_export.h"
+#include "../../app_shared_libraries/libPCA9532/PCA9532_export.h"
 
 #include <dlfcn.h>
 
@@ -14,8 +14,6 @@
 
 int main (void)
 {
-	uint8_t buffer[SIZE_BUFFER];
-
 	void *libHandlerPCA9532 = NULL;
 	char route[256] = {0};
 

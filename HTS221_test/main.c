@@ -6,7 +6,7 @@
  */
 
 
-#include "../libHTS221/HTS221_export.h"
+#include "../../app_shared_libraries/libHTS221/HTS221_export.h"
 
 int main (void)
 {

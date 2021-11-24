@@ -5,7 +5,7 @@
  *      Author: bernardo
  */
 
-#include "../libPAC1932/PAC1932_export.h"
+#include "../../app_shared_libraries/libPAC1932/PAC1932_export.h"
 
 static PAC1932_struct PAC1932_data = {0};
 
