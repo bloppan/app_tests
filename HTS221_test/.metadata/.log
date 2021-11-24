@@ -1,0 +1,10 @@
+!SESSION 2021-07-20 13:25:32.393 -----------------------------------------------
+eclipse.buildId=4.17.0.I20200902-1800
+java.version=14.0.2
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.cpp.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.cpp.product
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-07-20 13:27:10.683
+!MESSAGE Indexed 'PAC1932_test' (1 sources, 92 headers) in 0.925 sec: 2,081 declarations; 3,112 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0%)
