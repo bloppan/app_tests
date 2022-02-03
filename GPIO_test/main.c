@@ -49,9 +49,26 @@ int main(void){
 
 		uint8_t gpio = EN_4V2;
 
-		configGPIO(gpio, "out");
+		configGPIO(EN_4V2, "out");
+		configGPIO(EN_5V_USB_MOB, "out");
+
+		setGPIO_Value(EN_4V2, 0);
+		setGPIO_Value(EN_5V_USB_MOB, 0);
+
+		printf("Pulsa enter \n");
+
 		getchar();
-		setGPIO_Value(gpio, 0);
+
+		setGPIO_Value(EN_4V2, 1);
+		setGPIO_Value(EN_5V_USB_MOB, 1);
+
+		printf("Fin del programa \n");
+
+		freeGPIO(EN_4V2);
+		freeGPIO(EN_5V_USB_MOB);
+
+		return 0;
+
 		getGPIO_Value(gpio, &value);
 		getGPIO_Direction(gpio, direction);
 		getchar();

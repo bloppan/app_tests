@@ -1,0 +1,193 @@
+/*
+ * main.c
+ *
+ *  Created on: 15/12/2021
+ *      Author: bernardo
+ */
+
+#include <stdio.h>
+
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#include <net/if.h>
+#include <sys/ioctl.h>
+#include <sys/socket.h>
+#include <errno.h>
+
+#include <linux/can.h>
+#include <linux/can/raw.h>
+#include <linux/can/j1939.h>
+
+#include "../../app_includes/app_typedef.h"
+#include "../../app_includes/app_errors.h"
+
+
+int s;
+struct sockaddr_can addr;
+struct ifreq ifr;
+
+
+error_type CAN_Initialize(char* interface, char* speed)
+{
+	error_type codeError = NO_ERROR;
+
+    FILE *fp;
+
+    char command[100];
+
+    /* command contains the command string (a character array) */
+
+
+    memset(command, 0, sizeof(command));
+    sprintf(command, "/sbin/ifconfig %s down", interface);
+    printf("command = %s \n", command);
+    fp = popen(command,"r");
+
+    sleep(1);
+
+    memset(command, 0, sizeof(command));
+    sprintf(command, "ip link set can0 type can bitrate %s", speed);
+    printf("command = %s \n", command);
+    fp = popen(command,"r");
+
+    sleep(1);
+
+    memset(command, 0, sizeof(command));
+    sprintf(command, "/sbin/ifconfig %s up", interface);
+    printf("command = %s \n", command);
+    fp = popen(command,"r");
+
+    sleep(1);
+    fclose(fp);
+
+      /*
+	if ((s = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
+		perror("Socket");
+		return 1;
+	}
+
+	strcpy(ifr.ifr_name, interface);
+
+	ioctl(s, SIOCGIFINDEX, &ifr);
+
+	memset(&addr, 0, sizeof(addr));
+	addr.can_family = AF_CAN;
+	addr.can_ifindex = ifr.ifr_ifindex;
+
+	if (bind(s, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+		perror("Bind");
+		return 1;
+	}
+*/
+
+
+	return codeError;
+}
+
+
+error_type CAN_Send(struct can_frame* frame)
+{
+	error_type codeError = NO_ERROR;
+
+
+	if (write(s, frame, sizeof(struct can_frame)) != sizeof(struct can_frame)) {
+		perror("Write");
+		return 1;
+	}
+
+//	int ret = sendto(sock, dat, todo_send, 0, (void *)&peername, sizeof(peername));
+
+	return codeError;
+}
+
+error_type CAN_Receive(struct can_frame* frame)
+{
+	error_type codeError = NO_ERROR;
+
+	int nbytes, i;
+
+	nbytes = read(s, frame, sizeof(struct can_frame));
+
+ 	if (nbytes < 0) {
+		perror("Read");
+		return 1;
+	}
+
+	printf("0x%03X [%d] ",frame->can_id, frame->can_dlc);
+
+	for (i = 0; i < frame->can_dlc; i++)
+		printf("%02X ",frame->data[i]);
+
+	printf("\r\n");
+
+	return codeError;
+}
+
+
+int main(void)
+{
+
+		s = socket(PF_CAN, SOCK_DGRAM, CAN_J1939);
+
+		int todo_broadcast = 1;
+		int ret = 0;
+
+
+		ret = setsockopt(s, SOL_SOCKET, SO_BROADCAST, &todo_broadcast, sizeof(todo_broadcast));
+
+		printf("ret setsockopt = %d \n", ret);
+
+		struct sockaddr_can baddr = {
+		        .can_family = AF_CAN,
+		        .can_addr.j1939 = {
+		                .name = J1939_NO_NAME,
+		                .addr = 0x20,
+		                .pgn = J1939_NO_PGN,
+		        },
+		        .can_ifindex = if_nametoindex("can0"),
+		};
+
+		bind(s, (struct sockaddr *)&baddr, sizeof(baddr));
+
+
+//		FILE *file = fopen("/pruebas/prueba.txt", "r");
+
+		FILE *file = fopen("/pruebas/info.json", "r");
+
+/*
+		uint8_t dat[35], j;
+
+		for (j = 0; j < sizeof(dat); ++j)
+			dat[j] = 2*j;
+
+		if (write(s, dat, sizeof(dat)) != sizeof(dat)) {
+			perror("Write");
+			return 1;
+		}
+		*/
+
+		char json_array[4000];
+
+		memset(json_array, 0, sizeof(json_array));
+
+	    uint32_t n_bytes = 0, j = 0;
+
+	    while(!feof(file))
+	        fscanf(file, "%c", &json_array[n_bytes++]);
+	    fclose(file);
+
+
+	    for(j = 0; j < n_bytes; j++){
+
+	    	printf("%c ", json_array[j]);
+	    }
+
+		if (write(s, json_array, n_bytes) != n_bytes) {
+			perror("Write");
+			return 1;
+		}
+
+		return 0;
+}
