@@ -1,0 +1,167 @@
+/*
+ * main.c
+ *
+ *  Created on: 15/12/2021
+ *      Author: bernardo
+ */
+
+#include <stdio.h>
+
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#include <net/if.h>
+#include <sys/ioctl.h>
+#include <sys/socket.h>
+#include <errno.h>
+
+#include <linux/can.h>
+#include <linux/can/raw.h>
+#include <linux/can/j1939.h>
+
+#include "../../app_includes/app_typedef.h"
+#include "../../app_includes/app_errors.h"
+
+
+int s;
+struct sockaddr_can addr;
+struct ifreq ifr;
+
+struct can_message {
+
+	struct can_frame frame;
+	struct sockaddr_can addr;
+	struct ifreq ifr;
+	int socket;
+
+};
+
+struct can_message can_info;
+
+error_type CAN_Initialize(struct can_message * can_data)
+{
+	error_type codeError = NO_ERROR;
+	int todo_broadcast = 1;
+	int ret = 0;
+    char command[100];
+
+    memset(command, 0, sizeof(command));
+    sprintf(command, "/sbin/ifconfig can0 down");
+    printf("command = %s \n", command);
+    popen(command,"r");
+
+    sleep(1);
+
+    memset(command, 0, sizeof(command));
+    sprintf(command, "ip link set can0 type can bitrate 500000");
+    printf("command = %s \n", command);
+    popen(command,"r");
+
+    sleep(1);
+
+    memset(command, 0, sizeof(command));
+    sprintf(command, "/sbin/ifconfig can0 up");
+    printf("command = %s \n", command);
+    popen(command,"r");
+
+    sleep(1);
+
+
+	can_data->socket = socket(PF_CAN, SOCK_DGRAM, CAN_J1939);
+
+	ret = setsockopt(can_data->socket, SOL_SOCKET, SO_BROADCAST, &todo_broadcast, sizeof(todo_broadcast));
+
+	printf("ret setsockopt = %d \n", ret);
+
+	return codeError;
+}
+
+error_type CAN_Configure(struct can_message * can_data)
+{
+
+	can_data->addr.can_family = AF_CAN;
+	can_data->addr.can_addr.j1939.name = J1939_NO_NAME;
+	can_data->addr.can_addr.j1939.addr = 0x20;
+	can_data->addr.can_addr.j1939.pgn = J1939_NO_PGN;
+	can_data->addr.can_ifindex = if_nametoindex("can0");
+
+	bind(can_data->socket, (struct sockaddr *)&can_data->addr, sizeof(can_data->addr));
+
+}
+
+error_type CAN_SendFile(struct can_message * can_data, char * path)
+{
+	char json_array[2000];
+	uint32_t n_bytes = 0, j = 0;
+
+	FILE *file = fopen(path, "r");
+
+	memset(json_array, 0, sizeof(json_array));
+
+	while(!feof(file)){
+
+		fscanf(file, "%c", &json_array[n_bytes++]);
+	}
+
+	fclose(file);
+
+	for(j = 0; j < n_bytes; j++){
+
+		printf("%c ", json_array[j]);
+	}
+
+	if (write(can_info.socket, json_array, n_bytes) != n_bytes) {
+		perror("CAN Send file: ");
+		return 1;
+	}
+}
+
+error_type CAN_Send(struct can_message * can_data)
+{
+	error_type codeError = NO_ERROR;
+
+	if (write(can_data->socket, &can_data->frame, sizeof(struct can_frame)) != sizeof(struct can_frame)) {
+
+		perror("CAN Send: ");
+		return 1;
+	}
+
+	return codeError;
+}
+
+error_type CAN_Receive(struct can_frame* frame)
+{
+	error_type codeError = NO_ERROR;
+
+	int nbytes, i;
+
+	nbytes = read(s, frame, sizeof(struct can_frame));
+
+ 	if (nbytes < 0) {
+		perror("Read");
+		return 1;
+	}
+
+	printf("0x%03X [%d] ",frame->can_id, frame->can_dlc);
+
+	for (i = 0; i < frame->can_dlc; i++)
+		printf("%02X ",frame->data[i]);
+
+	printf("\r\n");
+
+	return codeError;
+}
+
+
+
+int main(void)
+{
+
+	CAN_Initialize(&can_info);
+	CAN_Configure(&can_info);
+
+	CAN_SendFile(&can_info, "/home/info.json");
+
+	return 0;
+}

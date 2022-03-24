@@ -23,11 +23,11 @@ int main (void)
 
 	if(libHandler == NULL) {
 
-		printf("[ERROR] al cargar la libreria libPAC1932 \n");
+		printf("[ERROR]\t[PAC1932]\tLoading %s library \n", route);
 
 	}else {
 
-		printf("[OK] Libreria libPAC1932 cargada \n");
+		printf("[OK]\t[PAC1932]\tLibrary %s loaded successfully \n", route);
 
 		// Carga de funciones de la libreria del sensor PAC1932
 		PAC1932_Initialize			= (error_type ( *)(void)) dlsym(libHandler, "PAC1932_Initialize");

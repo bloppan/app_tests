@@ -1,0 +1,27 @@
+12:41:39 **** Incremental Build of configuration Release for project PCA9532_test ****
+make all 
+Building file: ../main.c
+Invoking: Cross GCC Compiler
+arm-linux-gnueabihf-gcc -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.d" -o "main.o" "../main.c"
+In file included from ../../../app_shared_libraries/libPCA9532/../libI2C/../../app_includes/app_typedef.h:11,
+                 from ../../../app_shared_libraries/libPCA9532/../libI2C/I2C.h:22,
+                 from ../../../app_shared_libraries/libPCA9532/../libI2C/I2C_export.h:11,
+                 from ../../../app_shared_libraries/libPCA9532/PCA9532.h:11,
+                 from ../../../app_shared_libraries/libPCA9532/PCA9532_export.h:11,
+                 from ../main.c:8:
+../../../app_shared_libraries/libPCA9532/../libI2C/../../app_includes/app_errors.h:85: warning: "OPENING_SOCKET" redefined
+   85 | #define  OPENING_SOCKET     31
+      | 
+../../../app_shared_libraries/libPCA9532/../libI2C/../../app_includes/app_errors.h:49: note: this is the location of the previous definition
+   49 | #define  OPENING_SOCKET     13
+      | 
+Finished building: ../main.c
+ 
+Building target: PCA9532_test
+Invoking: Cross GCC Linker
+arm-linux-gnueabihf-gcc  -o "PCA9532_test"  ./main.o   -ldl
+Finished building target: PCA9532_test
+ 
+
+12:41:40 Build Finished (took 774ms)
+

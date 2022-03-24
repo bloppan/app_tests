@@ -1,0 +1,20 @@
+20:31:15 **** Incremental Build of configuration Release for project CAN_test ****
+make all 
+Building file: ../main.c
+Invoking: Cross GCC Compiler
+arm-linux-gnueabihf-gcc -I/usr/arm-linux-gnueabihf/include/ -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.d" -o "main.o" "../main.c"
+../main.c: In function ‘CAN_Configure’:
+../main.c:91:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+../main.c: In function ‘CAN_SendFile’:
+../main.c:118:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+Finished building: ../main.c
+ 
+Building target: CAN_test
+Invoking: Cross GCC Linker
+arm-linux-gnueabihf-gcc  -o "CAN_test"  ./main.o   
+Finished building target: CAN_test
+ 

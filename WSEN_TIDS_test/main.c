@@ -15,7 +15,7 @@
 #include <dirent.h>
 #include <dlfcn.h>
 
-#include "../../app_shared_libraries/libWSEN_TIDS/libWSEN_TIDS_export.h"
+#include "../../app_shared_libraries/libWSEN_TIDS/WSEN_TIDS_export.h"
 
 #include "../../app_includes/app_errors.h"
 #include "../../app_includes/app_typedef.h"
@@ -30,7 +30,7 @@ int main(void)
 
 	char route[256] = {0};
 
-	// Carga la libreria libPAC1932
+
 	strcat(route, "/usr/lib/");
 	strcat(route, "libWSEN_TIDS.so.1");
 
@@ -38,12 +38,12 @@ int main(void)
 
 	if(libHandlerWSEN == NULL) {
 
-		printf("[ERROR] al cargar la libreria WSEN_TIDS: %s \n", strerror(errno));
+		printf("[ERROR]\t[WSEN-TIDS]\tLoading %s library \n", route);
 	}
 
 	else {
 
-		printf("[OK]\tLibreria sensor WSEN_TIDS cargada \n");
+		printf("[OK]\t[WSEN-TIDS]\tLibrary %s loaded successfully \n", route);
 
 		WSEN_TIDS_Initialize		= (error_type ( *)(void)) dlsym(libHandlerWSEN, "WSEN_TIDS_Initialize");
 		WSEN_TIDS_getTemperature 	= (error_type ( *)(float *)) dlsym(libHandlerWSEN, "WSEN_TIDS_getTemperature");

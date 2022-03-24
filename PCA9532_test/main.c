@@ -10,8 +10,6 @@
 #include <dlfcn.h>
 
 
-#define	SIZE_BUFFER		4
-
 int main (void)
 {
 	void *libHandlerPCA9532 = NULL;
@@ -25,11 +23,11 @@ int main (void)
 
 	if(libHandlerPCA9532 == NULL) {
 
-		printf("[ERROR]\t[PCA9532]\tLoading PCA9532 library\n");
+		printf("[ERROR]\t[PCA9532]\tLoading %s library \n", route);
 
 	}else {
 
-		printf("[OK]\t[PCA9532]\tPCA9532 library loaded successfully \n");
+		printf("[OK]\t[PCA9532]\tLibrary %s loaded successfully \n", route);
 
 		// Carga de funciones de la libreria I2C:
 		setLED_Value = (error_type ( *)(uint8_t, uint8_t)) dlsym(libHandlerPCA9532, "setLED_Value");

@@ -1,0 +1,35 @@
+10:41:27 **** Incremental Build of configuration Release for project Socket_Android_test ****
+make all 
+Building file: ../main.c
+Invoking: Cross GCC Compiler
+arm-linux-gnueabihf-gcc -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.d" -o "main.o" "../main.c"
+../main.c: In function ‘func’:
+../main.c:20:9: warning: implicit declaration of function ‘write’ [-Wimplicit-function-declaration]
+         write(sockfd, buff, sizeof(buff));
+         ^~~~~
+../main.c:22:9: warning: implicit declaration of function ‘read’ [-Wimplicit-function-declaration]
+         read(sockfd, buff, sizeof(buff));
+         ^~~~
+../main.c: In function ‘main’:
+../main.c:48:32: warning: implicit declaration of function ‘inet_addr’ [-Wimplicit-function-declaration]
+     servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+                                ^~~~~~~~~
+../main.c:63:5: warning: implicit declaration of function ‘close’ [-Wimplicit-function-declaration]
+     close(sockfd);
+     ^~~~~
+../main.c:34:34: warning: unused variable ‘cli’ [-Wunused-variable]
+     struct sockaddr_in servaddr, cli;
+                                  ^~~
+../main.c:33:17: warning: unused variable ‘connfd’ [-Wunused-variable]
+     int sockfd, connfd;
+                 ^~~~~~
+Finished building: ../main.c
+ 
+Building target: Socket_Android_test
+Invoking: Cross GCC Linker
+arm-linux-gnueabihf-gcc  -o "Socket_Android_test"  ./main.o   
+Finished building target: Socket_Android_test
+ 
+
+10:41:27 Build Finished (took 769ms)
+

@@ -1,0 +1,15 @@
+12:24:16 **** Build of configuration Release for project WSEN_TIDS_test ****
+make all 
+Building file: ../main.c
+Invoking: Cross GCC Compiler
+arm-linux-gnueabihf-gcc -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.d" -o "main.o" "../main.c"
+Finished building: ../main.c
+ 
+Building target: WSEN_TIDS_test
+Invoking: Cross GCC Linker
+arm-linux-gnueabihf-gcc  -o "WSEN_TIDS_test"  ./main.o   -ldl
+Finished building target: WSEN_TIDS_test
+ 
+
+12:24:17 Build Finished (took 769ms)
+

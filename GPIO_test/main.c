@@ -25,27 +25,17 @@ int main(void){
 
 	if(libHandler == NULL) {
 
-		printf("[ERROR] al cargar la libreria libPAC1932 \n");
+		printf("[ERROR]\t[GPIO]\tLoading %s library \n", route);
 
 	}else {
 
-		printf("[OK] Libreria libPAC1932 cargada \n");
-
-		// Carga de funciones de la libreria del sensor PAC1932
-		/*
-		error_type (*configGPIO)(uint8_t gpio, char* direction);
-		error_type (*freeGPIO)(uint8_t gpio);
-		error_type (*getGPIO_Value)(uint8_t gpio, uint8_t* value);
-		error_type (*getGPIO_Direction)(uint8_t gpio, char* direction);
-		error_type (*setGPIO_Value)(uint8_t gpio, uint8_t value);
-*/
+		printf("[OK]\t[GPIO]\tLibrary %s loaded successfully \n", route);
 
 		configGPIO = (error_type ( *)(uint8_t, char*)) dlsym(libHandler, "configGPIO");
 		freeGPIO = (error_type ( *)(uint8_t)) dlsym(libHandler, "freeGPIO");
 		getGPIO_Value = (error_type ( *)(uint8_t, uint8_t*)) dlsym(libHandler, "getGPIO_Value");
 		getGPIO_Direction = (error_type ( *)(uint8_t, char*)) dlsym(libHandler, "getGPIO_Direction");
 		setGPIO_Value = (error_type ( *)(uint8_t, uint8_t)) dlsym(libHandler, "setGPIO_Value");
-
 
 		uint8_t gpio = EN_4V2;
 
@@ -66,19 +56,7 @@ int main(void){
 
 		freeGPIO(EN_4V2);
 		freeGPIO(EN_5V_USB_MOB);
-
-		return 0;
-
-		getGPIO_Value(gpio, &value);
-		getGPIO_Direction(gpio, direction);
-		getchar();
-		setGPIO_Value(gpio, 1);
-		getGPIO_Value(gpio, &value);
-		getGPIO_Direction(gpio, direction);
-		freeGPIO(gpio);
 	}
-
-
 
 	return 0;
 }
