@@ -10,14 +10,10 @@
 
 int main(void){
 
-	uint8_t value;
-	char direction[10] = {0};
-
-
 	void *libHandler = NULL;
 	char route[256] = {0};
 
-	// Carga la libreria libPAC1932
+	// Carga la libreria libGPIO
 	strcat(route, GPIO_LIBRARY_DIRECTORY);
 	strcat(route, GPIO_LIBRARY_NAME);
 
@@ -37,7 +33,6 @@ int main(void){
 		getGPIO_Direction = (error_type ( *)(uint8_t, char*)) dlsym(libHandler, "getGPIO_Direction");
 		setGPIO_Value = (error_type ( *)(uint8_t, uint8_t)) dlsym(libHandler, "setGPIO_Value");
 
-		uint8_t gpio = EN_4V2;
 
 		configGPIO(EN_4V2, "out");
 		configGPIO(EN_5V_USB_MOB, "out");
